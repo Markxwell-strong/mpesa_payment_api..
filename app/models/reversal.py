@@ -1,0 +1,21 @@
+from sqlalchemy import Column, Integer, String, Numeric, DateTime, Text, ForeignKey, func
+from app.database import Base
+
+
+class ReversalRequest(Base):
+    __tablename__ = "reversal_requests"
+
+    id = Column(Integer, primary_key=True, index=True)
+    transaction_id = Column(Integer, ForeignKey("transactions.id"), nullable=False, index=True)
+    original_receipt_number = Column(String(50), nullable=False, index=True)
+    amount = Column(Numeric(10, 2), nullable=False)
+    remarks = Column(String(100), nullable=False)
+    occasion = Column(String(100), nullable=True)
+    conversation_id = Column(String(100), nullable=True, index=True)
+    originator_conversation_id = Column(String(100), nullable=True, index=True)
+    result_code = Column(Integer, nullable=True)
+    result_description = Column(Text, nullable=True)
+    status = Column(String(20), nullable=False, default="requested", index=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(),
+                        onupdate=func.now(), nullable=False)
